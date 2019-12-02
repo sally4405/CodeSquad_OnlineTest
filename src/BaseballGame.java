@@ -6,67 +6,92 @@ public class BaseballGame {
         System.out.println("신나는 야구 게임!");
         System.out.println("첫 번째 타자가 타석에 입장했습니다.\n");
 
-        int[] arr = new int[4];
+        Record re = new Record();
         Random random = new Random();
 
         while(true) {
-            int num = random.nextInt(4);
+            int rand = random.nextInt(4);
+            EventType type = occur(rand);
 
-            choice(num, arr);
+            re.add(type);
+            re.info();
 
-            if(arr[2] == 3) {
-                System.out.println("최종 안타수: " + arr[3] + "\nGAME OVER");
+            if(re.getOut() == 3) {
+                System.out.println("최종 안타수: " + re.getHit() + "\nGAME OVER");
                 break;
             }
-
         }
-
     }
 
-    private static void choice(int num, int[] arr) {
+    public static EventType occur(int rand) {
+        if(rand == 0) return EventType.STRIKE;
+        else if(rand == 1) return EventType.BALL;
+        else if(rand == 2) return EventType.OUT;
+        else return EventType.HIT;
+    }
+}
 
-        arr[num]++;
+class Record {
+    private int strike = 0;
+    private int ball = 0;
+    private int out = 0;
+    private int hit = 0;
 
-        switch(num) {
-            case 0: System.out.print("스트라이크!");
-                break;
-            case 1: System.out.print("볼!");
-                break;
-            case 2:
-                if(arr[2] == 3) System.out.print("아웃!");
-                else {
-                    System.out.print("아웃!");
-                    next(arr);
+    public void add(EventType type) {
+        switch (type) {
+            case STRIKE:
+                this.strike++;
+                System.out.print("스트라이크!");
+                if(this.strike == 3) {
+                    System.out.println();
+                    add(EventType.OUT);
                 }
                 break;
-            case 3:
+            case BALL:
+                this.ball++;
+                System.out.print("볼!");
+                if(this.ball == 4) {
+                    System.out.println();
+                    add(EventType.HIT);
+                }
+                break;
+            case OUT:
+                this.out++;
+                System.out.print("아웃!");
+                if(this.out == 3) break;
+                reset();
+                break;
+            case HIT:
+                this.hit++;
                 System.out.print("안타!");
-                next(arr);
+                reset();
                 break;
         }
-        check(arr);
-
-        System.out.println("\n" + arr[0] + "S " + arr[1] + "B " + arr[2] + "O\n");
     }
 
-    private static void check(int[] arr) {
-        if(arr[0] == 3) {
-            arr[2]++;
-            System.out.print("\n아웃!");
-            if(arr[2] != 3) next(arr);
-        }
-        if(arr[1] == 4) {
-            arr[3]++;
-            System.out.print("\n안타!");
-            next(arr);
-        }
-
+    public void reset() {
+        this.strike = 0;
+        this.ball = 0;
+        System.out.print(" 다음 타자가 타석에 입장했습니다. ");
     }
 
-    private static void next(int[] arr) {
-        arr[0] = 0;
-        arr[1] = 0;
-        System.out.print(" 다음 타자가 타석에 입장했습니다.");
+    public void info() {
+        System.out.println("\n" + strike + "S " + ball + "B " + out + "O\n");
     }
 
+    public int getStrike() {
+        return strike;
+    }
+
+    public int getBall() {
+        return ball;
+    }
+
+    public int getOut() {
+        return out;
+    }
+
+    public int getHit() {
+        return hit;
+    }
 }
