@@ -15,16 +15,26 @@ public class BaseballGame {
             System.out.println("2. 데이터 출력");
             System.out.println("3. 시합 시작\n");
             System.out.print("메뉴선택 (1 - 3) ");
-            selectNum = scan.nextInt();
-            scan.nextLine();    //개행문자(\n) 제거를 위해
 
-            if(selectNum == 1) dataInput(teamList);
-            else if(selectNum == 2) dataOutput(teamList);
-            else if(selectNum == 3) {
-                gameStart(teamList);
-                break;
+            try {
+                selectNum = scan.nextInt();
+                scan.nextLine();    //개행문자(\n) 제거를 위해
+            } catch (InputMismatchException e) {
+                scan = new Scanner(System.in);
+                System.out.println("정수를 입력해주세요. \n");
+                continue;
             }
-            else System.out.println("* 1-3 사이의 숫자를 입력해주세요. *");
+
+            if (selectNum == 1) dataInput(teamList);
+            else if (selectNum == 2) dataOutput(teamList);
+            else if (selectNum == 3) {
+                try {
+                    gameStart(teamList);
+                    break;
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("데이터를 먼저 입력해주세요. \n");
+                }
+            } else System.out.println("1-3 사이의 숫자를 입력해주세요. \n");
         }
     }
 
@@ -49,13 +59,22 @@ public class BaseballGame {
             team.setRecord(record);
 
             for(int j = 0; j < 9; j++) {
-                System.out.print((j+1) + "번 타자 정보 입력> ");
-                playerInfo = scan.nextLine().split(", ");
-                name = playerInfo[0];
-                batAve = Float.parseFloat(playerInfo[1]);
-
-                Player player = new Player(j+1, name, batAve);
-                playerList.add(player);
+                while (true) {
+                    System.out.print((j+1) + "번 타자 정보 입력> ");
+                    try {
+                        playerInfo = scan.nextLine().split(", ");
+                        name = playerInfo[0];
+                        batAve = Float.parseFloat(playerInfo[1]);
+                        if(batAve < 0.1 || batAve > 0.5) throw new BatAveOutOfBoundsException();
+                        Player player = new Player(j+1, name, batAve);
+                        playerList.add(player);
+                        break;
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        System.out.println("이름, 타율 형식으로 입력해주세요. ");
+                    } catch (BatAveOutOfBoundsException e) {
+                        System.out.println("타율은 0.1 초과, 0.5 미만으로 소수 세째 자리까지 입력할 수 있습니다. ");
+                    }
+                }
             }
             System.out.println();
         }
@@ -283,4 +302,8 @@ class Record {
     public int getScore() {
         return score;
     }
+}
+
+class BatAveOutOfBoundsException extends Exception {
+
 }
