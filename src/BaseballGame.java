@@ -21,7 +21,7 @@ public class BaseballGame {
                 scan.nextLine();    //개행문자(\n) 제거를 위해
             } catch (InputMismatchException e) {
                 scan = new Scanner(System.in);
-                System.out.println("정수를 입력해주세요. \n");
+                System.err.println("정수를 입력해주세요. \n");
                 continue;
             }
 
@@ -32,9 +32,9 @@ public class BaseballGame {
                     gameStart(teamList);
                     break;
                 } catch (IndexOutOfBoundsException e) {
-                    System.out.println("데이터를 먼저 입력해주세요. \n");
+                    System.err.println("데이터를 먼저 입력해주세요. \n");
                 }
-            } else System.out.println("1-3 사이의 숫자를 입력해주세요. \n");
+            } else System.err.println("1-3 사이의 숫자를 입력해주세요. \n");
         }
     }
 
@@ -70,9 +70,9 @@ public class BaseballGame {
                         playerList.add(player);
                         break;
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        System.out.println("이름, 타율 형식으로 입력해주세요. ");
+                        System.err.println("이름, 타율 형식으로 입력해주세요. ");
                     } catch (BatAveOutOfBoundsException e) {
-                        System.out.println("타율은 0.1 초과, 0.5 미만으로 소수 세째 자리까지 입력할 수 있습니다. ");
+                        System.err.println("타율은 0.1 초과, 0.5 미만으로 소수 세째 자리까지 입력할 수 있습니다. ");
                     }
                 }
             }
