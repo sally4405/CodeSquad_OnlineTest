@@ -101,7 +101,6 @@ public class BaseballGame {
         for(int i = 0; i < 6; i++) {
             for(Team team : teamList) {
                 team.startText(i+1);
-                ArrayList<Player> playerList = team.getPlayerList();
                 team.getRecord().play(team);
                 team.getRecord().resetAll(team);
             }
@@ -241,8 +240,6 @@ class Record {
     }
 
     public void add(EventType type, Team team) {
-
-
         switch (type) {
             case STRIKE:
                 this.strike++;
@@ -304,6 +301,4 @@ class Record {
     }
 }
 
-class BatAveOutOfBoundsException extends Exception {
-
-}
+class BatAveOutOfBoundsException extends Exception { }
